@@ -2,6 +2,7 @@
 #include "stdlib.h"
 #include <cmath>
 #include <cstdlib>
+#include "vector2.h"
 
 using namespace std;
 
