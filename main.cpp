@@ -9,8 +9,8 @@
 
 using namespace std;
 
-const int screenWidth = 700;
-const int screenHeight = 700;
+const int screenWidth = 1000;
+const int screenHeight = 1000;
 vector2 center {screenWidth/2, screenHeight/2};
 
 vector2 getRandomNormalizedVector(){
@@ -70,13 +70,36 @@ void checkBoundariesCollision(vector<Circle*> circles, Circle* boundaries){
     }
 }
 
+void updateAfterCollisionVelocity(Circle* circleA, Circle* circleB){
+    vector2 rABn = (circleB->getPosition() - circleA->getPosition()).normalize(); // nHat
+    vector2 vAB = circleB->getVelocity() - circleA->getVelocity();
+    double vABn = vAB.dot(rABn);
+
+    if(vABn >= 0) return;
+
+    double impulse = (2 * vABn) / (circleA->getMass() + circleB->getMass());
+
+    circleA->setVelocity(circleA->getVelocity() + rABn * (impulse * circleB->getMass()));
+    circleB->setVelocity(circleB->getVelocity() - rABn * (impulse * circleA->getMass()));
+}
+
+void checkCollisions(vector<Circle*> circles){
+    for(int a=0; a<circles.size(); a++){
+        for (int b=a+1; b<circles.size(); b++) {
+            if((circles[b]->getPosition()-circles[a]->getPosition()).magnitude() <= circles[a]->getRadius() + circles[b]->getRadius()){
+                updateAfterCollisionVelocity(circles[a], circles[b]);
+            }
+        }
+    }
+}
+
 int main(void)
 {
     srand(time(NULL));
 
     Circle* boundaries = new Circle(vector2 {screenWidth/2,screenHeight/2}, {0,0}, screenWidth/2.01, BLACK);
 
-    vector<Circle*> circles = generateCircles(vector<int> {50}, WHITE, boundaries);
+    vector<Circle*> circles = generateCircles(vector<int> {60, 80, 140, 200}, WHITE, boundaries);
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
@@ -94,6 +117,7 @@ int main(void)
             circle->update();
         }
 
+        checkCollisions(circles);
         checkBoundariesCollision(circles, boundaries);
 
         EndDrawing();

@@ -12,7 +12,7 @@ class Circle {
         Circle(vector2 position, vector2 velocity, int radius, Color color){
             this->position = position;
             this->mass = PI * radius * radius;
-            this->velocity = velocity * 15000/mass;
+            this->velocity = velocity * 100000/mass;
             this->radius = radius;
             this->color = color;
         }
@@ -33,6 +33,9 @@ class Circle {
         }
         int getRadius(){
             return radius;
+        }
+        double getMass(){
+            return mass;
         }
 
         void setVelocity(vector2 velocity){
