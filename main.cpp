@@ -5,7 +5,6 @@
 #include <ctime>
 #include <vector>
 #include "circle.h"
-#include <iostream>
 
 using namespace std;
 
@@ -41,8 +40,6 @@ vector<Circle*> generateCircles(vector<int> radii, Color color, Circle* boundari
         vector2 position;
         position.x = rand() % (screenWidth- radii[index]) + radii[index];
         position.y = rand() % (screenHeight - radii[index]) + radii[index];
-
-        cout << position.x << " " << position.y << endl;
 
         if((center - position).magnitude()  + radii[index] >= boundaries->getRadius()){
             continue;
