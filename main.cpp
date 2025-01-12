@@ -11,6 +11,7 @@ using namespace std;
 
 const int screenWidth = 700;
 const int screenHeight = 700;
+vector2 center {screenWidth/2, screenHeight/2};
 
 vector2 getRandomNormalizedVector(){
     float x = (rand() % 2000 - 1000) / 1000.0f;
@@ -38,12 +39,12 @@ vector<Circle*> generateCircles(vector<int> radii, Color color, Circle* boundari
     int index = 0;
     while(circles.size() < radii.size()){
         vector2 position;
-        position.x = rand() % (boundaries->getRadius() - radii[index]) + radii[index];
-        position.y = rand() % (boundaries->getRadius() - radii[index]) + radii[index];
+        position.x = rand() % (screenWidth- radii[index]) + radii[index];
+        position.y = rand() % (screenHeight - radii[index]) + radii[index];
 
         cout << position.x << " " << position.y << endl;
 
-        if(position.magnitude() + radii[index] >= boundaries->getRadius()){
+        if((center - position).magnitude()  + radii[index] >= boundaries->getRadius()){
             continue;
         }
 
@@ -56,6 +57,17 @@ vector<Circle*> generateCircles(vector<int> radii, Color color, Circle* boundari
     }
 
     return circles;
+}
+
+void checkBoundariesCollision(vector<Circle*> circles, Circle* boundaries){
+    for(Circle* circle : circles){
+        if((center - circle->getPosition()).magnitude()  + circle->getRadius() >= boundaries->getRadius()){
+            vector2 n = (circle->getPosition() - boundaries->getPosition()).normalize();
+            double dotProduct = circle->getVelocity().dot(n);
+
+            circle->setVelocity(circle->getVelocity() - n * (2 * dotProduct));
+        }
+    }
 }
 
 int main(void)
@@ -79,7 +91,10 @@ int main(void)
 
         for(Circle* circle : circles){
             circle->Draw();
+            circle->update();
         }
+
+        checkBoundariesCollision(circles, boundaries);
 
         EndDrawing();
     }
