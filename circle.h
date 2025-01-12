@@ -20,4 +20,11 @@ class Circle {
         void Draw() {
             DrawCircle(position.x, position.y, radius, color);
         }
+
+        vector2 getPosition(){
+            return position;
+        }
+        int getRadius(){
+            return radius;
+        }
 };
