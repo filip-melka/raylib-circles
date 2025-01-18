@@ -2,6 +2,10 @@
 
 Simulate bouncing circles of different sizes as they collide and react in real time.
 
+
+https://github.com/user-attachments/assets/09364153-2975-42ae-bb67-28176945ba5d
+
+
 ## 🗂️ Project Structure
 
 -   `main.cpp`: Contains the entry point of the program and manages the overall simulation loop.
